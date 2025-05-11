@@ -30,6 +30,10 @@
     --chart-3: 245 58% 51%;
     --chart-4: 31 95% 44%;
     --chart-5: 338 85% 55%;
+    
+    /* Background RGB values for direct manipulation */
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
   }
  
   .dark {
@@ -59,6 +63,10 @@
     --chart-3: 250 95% 76%;
     --chart-4: 43 96% 56%;
     --chart-5: 326 100% 74%;
+    
+    /* Background RGB values for direct manipulation */
+    --background-start-rgb: 10, 10, 10;
+    --background-end-rgb: 10, 10, 10;
   }
 }
 

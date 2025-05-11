@@ -1,35 +1,54 @@
+// app/login/page.tsx
 'use client';
 
+import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    await signIn('google', { callbackUrl });
+  };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <div className="flex flex-col items-center mt-10 p-10 shadow-md rounded-lg bg-white">
-        <h1 className="text-4xl font-bold mb-8">Welcome to AI Chatbot</h1>
-        
-        <p className="text-lg text-gray-600 mb-8">
-          Please sign in to continue
-        </p>
-        
-        <button
-          onClick={() => signIn('google', { callbackUrl })}
-          className="flex items-center justify-center gap-3 rounded-lg border bg-white px-6 py-3 text-slate-700 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-        >
-          <Image
-            src="https://authjs.dev/img/providers/google.svg"
-            width={24}
-            height={24}
-            alt="Google logo"
-          />
-          <span>Sign in with Google</span>
-        </button>
-      </div>
+    <div className="flex min-h-screen items-center justify-center bg-slate-100">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">AI Chatbot</CardTitle>
+          <CardDescription>
+            Sign in to start your conversation
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            className="w-full justify-center gap-2 border-gray-300"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+          >
+            <img
+              src="https://authjs.dev/img/providers/google.svg"
+              width={20}
+              height={20}
+              alt="Google logo"
+            />
+            <span>{isLoading ? 'Signing in...' : 'Sign in with Google'}</span>
+          </Button>
+        </CardContent>
+        <CardFooter className="flex flex-col text-center text-xs text-gray-500">
+          <p>
+            By signing in, you agree to our Terms of Service and
+            Privacy Policy
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   );
-} 
+}

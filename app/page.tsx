@@ -5,9 +5,9 @@ import { redirect } from 'next/navigation';
 export default async function Home() {
   const session = await getServerSession(authOptions);
   
-  // If authenticated, redirect to dashboard, otherwise to login
+  // If authenticated, redirect to chat, otherwise to login
   if (session) {
-    redirect('/dashboard');
+    redirect('/chat');
   } else {
     redirect('/login');
   }

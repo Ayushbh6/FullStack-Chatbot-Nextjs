@@ -21,9 +21,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
   
-  // If authenticated and trying to access login page, redirect to dashboard
+  // If authenticated and trying to access login page, redirect to chat
   if (token && isPublicPath) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(new URL('/chat', request.url));
   }
   
   // Otherwise, continue
@@ -32,5 +32,5 @@ export async function middleware(request: NextRequest) {
 
 // Configure which paths the middleware runs on
 export const config = {
-  matcher: ['/', '/login', '/dashboard/:path*']
+  matcher: ['/', '/login', '/dashboard/:path*', '/chat/:path*']
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, KeyboardEvent } from 'react';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -18,16 +18,37 @@ export default function ChatInput({ onSendMessage, isProcessing = false }: ChatI
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    // Send message with Enter (but not when Shift is pressed)
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Prevent default to avoid new line
+      if (message.trim() && !isProcessing) {
+        onSendMessage(message);
+        setMessage('');
+      }
+    }
+    // Shift+Enter creates a new line (default behavior, just let it happen)
+  };
+
   return (
-    <div className="border-t border-gray-200 bg-white p-4">
+    <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <input
-          type="text"
+        <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
+          onKeyDown={handleKeyDown}
+          placeholder="Type your message... (Enter to send, Shift+Enter for new line)"
           disabled={isProcessing}
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          rows={1}
+          className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 
+                     bg-white dark:bg-gray-800 
+                     text-gray-900 dark:text-gray-100
+                     px-4 py-2 
+                     focus:border-blue-500 dark:focus:border-blue-400 
+                     focus:outline-none focus:ring-2 
+                     focus:ring-blue-200 dark:focus:ring-blue-800
+                     placeholder:text-gray-500 dark:placeholder:text-gray-400
+                     resize-none min-h-[40px]"
         />
         <button
           type="submit"

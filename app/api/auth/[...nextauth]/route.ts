@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "@/lib/mongodb";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
 
@@ -11,6 +13,8 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       accessToken?: string;
+      /** The user's unique identifier */
+      id?: string;
     };
   }
 }
@@ -23,6 +27,8 @@ declare module "next-auth/jwt" {
 }
 
 export const authOptions = {
+  // Use MongoDB adapter for NextAuth to persist users and sessions
+  adapter: MongoDBAdapter(clientPromise),
   // 1) Configure Google as an OAuth provider
   providers: [
     GoogleProvider({
@@ -51,8 +57,9 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      // Make the token available on the client via `useSession()`
+      // Make the token and user ID available on the client via `useSession()`
       session.user.accessToken = token.accessToken;
+      session.user.id = token.sub;
       return session;
     },
   },

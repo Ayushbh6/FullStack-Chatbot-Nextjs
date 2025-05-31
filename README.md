@@ -1,105 +1,242 @@
 # Scalable AI Chatbot
 
-A scalable AI chatbot built with Next.js 15 and OpenAI.
+A production-ready, scalable AI chatbot built with Next.js 15, OpenAI GPT, and MongoDB. Features real-time streaming responses, persistent chat history, and a modern dark/light theme interface.
 
-## Features
+## ✨ Features
 
-- Google Authentication with NextAuth.js
-- Secure route protection
-- Modern UI with Tailwind CSS v4
-- (Future) AI chat functionality
+### 🔐 Authentication & Security
+- **Google OAuth Integration** with NextAuth.js
+- **MongoDB Adapter** for user session persistence
+- **Route Protection Middleware** for secure access
+- **User-specific Data Isolation** - each user only sees their own conversations
 
-## Setup
+### 💬 Chat Functionality
+- **Real-time Streaming Responses** from OpenAI GPT models
+- **Persistent Chat History** stored in MongoDB
+- **Multiple Conversations** - create, rename, and delete chat sessions
+- **Message Threading** - maintain context across conversation turns
+- **Auto-scroll** to latest messages
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+### 🎨 User Interface
+- **Modern Responsive Design** with Tailwind CSS v4
+- **Dark/Light Theme Toggle** with system preference detection
+- **Sidebar Navigation** for conversation management
+- **Real-time Message Streaming** with typing indicators
+- **File Upload Support** (infrastructure ready)
+- **Shadcn/ui Components** for consistent design system
 
-3. Configure environment variables:
-   Create a `.env.local` file in the root directory with the following variables:
-   ```
-   # NextAuth Configuration
-   NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=your-secret-key-here # Generate with: openssl rand -base64 32
+### 🏗️ Architecture
+- **Next.js 15 App Router** with TypeScript
+- **MongoDB Atlas Integration** with optimized connection pooling
+- **RESTful API Routes** for conversations and chat
+- **Streaming API Responses** for real-time chat experience
+- **Component-based Architecture** with reusable UI components
 
-   # Google OAuth
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   ```
+## 🚀 Quick Start
 
-4. Set up Google OAuth:
-   - Go to the [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project
-   - Configure OAuth consent screen
-   - Create OAuth credentials (Web application type)
-   - Add authorized redirect URIs:
-     - `http://localhost:3000/api/auth/callback/google` (for development)
-     - `https://your-production-domain.com/api/auth/callback/google` (for production)
-   - Copy the Client ID and Client Secret to your `.env.local` file
+### Prerequisites
+- Node.js 18+ and npm
+- MongoDB Atlas account
+- Google Cloud Console project
+- OpenAI API account
 
-5. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Project Structure
-
-- `app/` - Next.js App Router pages and layouts
-- `app/api/auth/[...nextauth]/` - NextAuth.js authentication API
-- `app/login/` - Login page with Google authentication
-- `app/dashboard/` - Protected dashboard page
-- `components/` - Reusable React components
-- `middleware.ts` - Route protection middleware
-
-## Technologies Used
-
-- Next.js 15
-- NextAuth.js
-- Tailwind CSS v4
-- TypeScript
-
-## Getting Started
-
-First, run the development server:
-
+### 1. Clone and Install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd scalable-ai-chatbot
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Configuration
+Create a `.env.local` file in the root directory:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here # Generate with: openssl rand -base64 32
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Google OAuth (Required)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 
-## Learn More
+# OpenAI API (Required)
+OPENAI_API_KEY=your-openai-api-key
 
-To learn more about Next.js, take a look at the following resources:
+# MongoDB Atlas (Required)
+MONGODB_ATLAS_CLUSTER_URI=mongodb+srv://username:password@cluster.mongodb.net/Chatbot_v2?retryWrites=true&w=majority
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Google OAuth Setup
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Configure OAuth consent screen
+5. Create OAuth 2.0 credentials (Web application)
+6. Add authorized redirect URIs:
+   - Development: `http://localhost:3000/api/auth/callback/google`
+   - Production: `https://your-domain.com/api/auth/callback/google`
+7. Copy Client ID and Secret to `.env.local`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. MongoDB Atlas Setup
+1. Create a MongoDB Atlas cluster
+2. Create a database named `Chatbot_v2`
+3. Get your connection string and add to `.env.local`
+4. Ensure your IP is whitelisted in Atlas
 
-## Deploy on Vercel
+### 5. Run Development Server
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Project Structure
+
+```
+scalable-ai-chatbot/
+├── app/                          # Next.js App Router
+│   ├── api/                      # API Routes
+│   │   ├── auth/[...nextauth]/   # NextAuth.js configuration
+│   │   ├── chat/                 # Chat streaming endpoint
+│   │   ├── conversations/        # Conversation CRUD operations
+│   │   ├── toolcalls/           # Tool calling functionality
+│   │   └── upload/              # File upload handling
+│   ├── chat/                    # Main chat interface
+│   ├── dashboard/               # User dashboard
+│   ├── login/                   # Authentication page
+│   ├── globals.css              # Global styles with Tailwind
+│   ├── layout.tsx               # Root layout component
+│   └── page.tsx                 # Landing page
+├── components/                   # Reusable React components
+│   ├── ui/                      # Shadcn/ui base components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   └── input.tsx
+│   ├── ChatLayout.tsx           # Main chat interface layout
+│   ├── ChatInput.tsx            # Message input component
+│   ├── Sidebar.tsx              # Conversation sidebar
+│   ├── ThemeProvider.tsx        # Theme context provider
+│   ├── ThemeInitializer.tsx     # Theme initialization
+│   ├── SessionProvider.tsx      # NextAuth session provider
+│   └── SignOutButton.tsx        # Authentication controls
+├── lib/                         # Utility libraries
+│   ├── mongodb.ts               # MongoDB connection client
+│   ├── conversations.ts         # Conversation data operations
+│   ├── openai.ts               # OpenAI client configuration
+│   └── utils.ts                # Utility functions
+├── middleware.ts                # Route protection middleware
+├── tailwind.config.js          # Tailwind CSS configuration
+├── components.json             # Shadcn/ui configuration
+└── package.json               # Dependencies and scripts
+```
+
+## 🛠️ Technologies Used
+
+### Frontend
+- **Next.js 15** - React framework with App Router
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type-safe development
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **Shadcn/ui** - Modern component library
+- **Lucide React** - Beautiful icon library
+
+### Backend & Database
+- **NextAuth.js** - Authentication solution
+- **MongoDB Atlas** - Cloud database with MongoDB adapter
+- **OpenAI API** - GPT models for chat responses
+
+### Development Tools
+- **ESLint** - Code linting
+- **Turbopack** - Fast development bundler
+- **PostCSS** - CSS processing
+
+## 🔧 Available Scripts
+
+```bash
+npm run dev        # Start development server with Turbopack
+npm run build      # Build for production
+npm run start      # Start production server
+npm run lint       # Run ESLint
+```
+
+## 🌐 API Endpoints
+
+### Authentication
+- `GET/POST /api/auth/*` - NextAuth.js authentication routes
+
+### Conversations
+- `GET /api/conversations` - Fetch user's conversations
+- `POST /api/conversations` - Create new conversation
+- `PUT /api/conversations/[id]` - Update conversation (rename)
+- `DELETE /api/conversations/[id]` - Delete conversation
+
+### Chat
+- `POST /api/chat` - Send message and get streaming AI response
+
+### File Upload
+- `POST /api/upload` - Handle file uploads (ready for implementation)
+
+## 🎯 Key Features Explained
+
+### Real-time Streaming
+The chat interface uses Server-Sent Events (SSE) to stream responses from OpenAI in real-time, providing a smooth user experience similar to ChatGPT.
+
+### Conversation Management
+Users can create multiple conversations, rename them, and delete them. All conversations are persisted in MongoDB and associated with the authenticated user.
+
+### Theme System
+Comprehensive dark/light theme support with system preference detection and manual toggle. Theme state persists across sessions.
+
+### Security
+- Route-level protection with middleware
+- User session management with NextAuth.js
+- Data isolation - users only access their own conversations
+- Secure API endpoints with authentication checks
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+1. Connect your GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+### Environment Variables for Production
+Ensure all environment variables are set in your production environment:
+- `NEXTAUTH_URL` - Your production domain
+- `NEXTAUTH_SECRET` - Secure random string
+- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - OAuth credentials
+- `OPENAI_API_KEY` - OpenAI API key
+- `MONGODB_ATLAS_CLUSTER_URI` - MongoDB connection string
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+If you encounter any issues:
+1. Check the [Issues](https://github.com/your-repo/issues) page
+2. Ensure all environment variables are correctly set
+3. Verify MongoDB Atlas connection and IP whitelist
+4. Check Google OAuth configuration
+
+## 🔮 Roadmap
+
+- [ ] File upload and processing
+- [ ] Vector embeddings for document search
+- [ ] Multi-model support (Claude, Gemini)
+- [ ] Conversation sharing
+- [ ] Export chat history
+- [ ] Advanced tool calling
+- [ ] Custom system prompts
+- [ ] Usage analytics dashboard
 
 
-<TEXT TO COPY. DO NOT DELETE>
-'''
-Our context here is getting over, I willl move ontot a new chat, give me a short but detailed context in plain text that I can paste in the next chat session and continue or work from there. I will run the code now and check how it works and will continue debugging it if needed
-'''
-</TEXT TO COPY. DO NOT DELETE>
